@@ -1,0 +1,134 @@
+#include<stdio.h>
+#include<malloc.h>
+
+struct node {
+	int data;
+	struct node*left ;
+	struct node*right;
+	
+};
+
+struct node* createnode(int data){
+	struct node *n;
+	n = (struct node*)malloc(sizeof(struct node));
+	n->data = data;
+	n->left = NULL;
+	n->right = NULL;
+	return n;
+}
+
+void preorder(struct node* root){
+	if(root!= NULL){
+		printf("%d ,",root->data);
+		preorder(root->left);
+		preorder(root->right);	
+	}
+}
+
+void postorder(struct node* root){
+	if(root!= NULL){
+		postorder(root->left);
+		postorder(root->right);
+		printf("%d ,",root->data);	
+	}
+}
+
+void inorder(struct node* root){
+	if(root!= NULL){
+		inorder(root->left);
+		printf("%d ,",root->data);
+		inorder(root->right);
+	}
+}
+
+int isbst(struct node* root){
+	static struct node*prev =NULL;
+	if(root!=NULL){
+		if(!isbst(root->left)){
+			return 0;
+			}
+		if( prev!=NULL && root->data <= prev->data){
+			return 0;
+		}
+		prev=root ;
+		return isbst(root->right);
+	}
+	else{
+		return 1;
+	}
+}
+
+struct node * search(struct node* root, int key)
+{
+	if(root == NULL){
+		return NULL;
+	}
+	else if(key == root->data){
+		return root;
+		}
+	else if(key< root->data){
+		return search(root->left,key);
+	}
+	else
+    	return search(root->right,key);
+}
+
+struct node *createNode(int data)
+{
+struct node *n;
+	n=(struct node*)malloc(sizeof(struct node));
+	n->data = data;
+	n->left = NULL;
+	n->right = NULL;
+	return n;
+}
+
+int main()
+{
+	struct node *p = createNode(5);
+	struct node *p1 = createNode(2);
+	struct node *p2 = createNode(7);
+	struct node *p3 = createNode(1);
+	struct node *p4 = createNode(3);
+	struct node *p5 = createNode(6);
+	struct node *p6 = createNode(9);
+//	        5
+//	       / \
+//	      2   7
+//	     /\  /\
+//	    1  36 9
+
+	p->left = p1;
+	p->right = p2;
+	p1->left = p3;
+	p1->right = p4;
+	p2->left = p5;
+	p2->right = p6;
+	
+	printf("Preorder element :");
+	preorder(p);
+	printf("\nInorder element :");
+	inorder(p);
+	printf("\nPostorder element :");
+	postorder(p);
+	printf("\n");
+	
+	//search the element in tree.
+	int src;
+	printf("\nEnter the element for Search :");
+	scanf("%d",&src);
+	struct node* n = search(p,src);
+	if(n!=NULL)
+	printf("\nSearch element is found :%d",n->data);
+	else
+	printf("\nSearch element is not found :%d",src);
+	
+	//checking the tree is bst or not.
+	printf("\n");
+	int temp = isbst(p);
+	if(temp==1)
+	printf("\ntree is Binary Search Tree");
+	else
+	printf("\ntree is not Binary Search Tree ");
+	return 0;
+}
